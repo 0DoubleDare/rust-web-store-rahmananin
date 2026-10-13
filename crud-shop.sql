@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Окт 13 2026 г., 11:42
+-- Время создания: Окт 13 2026 г., 11:50
 -- Версия сервера: 5.7.39
 -- Версия PHP: 8.1.9
 
@@ -43,7 +43,7 @@ CREATE TABLE `orders` (
   `date_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `user_id` int(11) NOT NULL,
   `total_price` int(11) NOT NULL,
-  `status` enum('новый','в обработке','доставлен','отменён') COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `status` enum('new','in_progress','delivered','cancelled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'new' COMMENT 'new - новый, in_progress - в обработке, delivered - доставлен, cancelled - отменён'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -84,7 +84,8 @@ CREATE TABLE `users` (
   `name` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password_hash` varchar(935) COLLATE utf8mb4_unicode_ci NOT NULL
+  `password_hash` varchar(935) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role` enum('user','admin') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

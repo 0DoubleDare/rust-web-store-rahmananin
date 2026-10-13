@@ -1,6 +1,8 @@
 use axum::{Router, routing::get};
-use rust_web_store_rahmananin::model::{server_queries::AppState, templates::{handlers::category_page_handler, index_handler}};
-use sqlx::{ConnectOptions, Error, MySql, MySqlPool, mysql::MySqlConnectOptions, pool};
+use rust_web_store_rahmananin::model::{
+    server_queries::AppState,
+    templates::{handlers::category_page_handler, index_handler},
+};
 use tower_http::services::ServeDir;
 use tower_sessions::{MemoryStore, SessionManagerLayer, cookie::time::Duration};
 use tracing::Level;

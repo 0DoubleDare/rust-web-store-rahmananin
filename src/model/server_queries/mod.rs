@@ -1,4 +1,3 @@
-use sqlx::{Pool, mysql::MySqlPool};
 
 #[derive(Clone)]
 pub struct AppState {

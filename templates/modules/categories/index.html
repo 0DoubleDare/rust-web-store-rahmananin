@@ -8,11 +8,17 @@
     </head>
     <body>
         <h1>Категории</h1>
-        <table>
+        <form action="/categories" method="post">
+            <label for="name">Имя категории</label>
+            <input type="text" name="name" />
+            <button type="submit">Добавить</button>
+        </form>
+        <table border="1">
             <thead>
                 <tr>
                     <th>id</th>
-                    <th>name</th>
+                    <th>Имя категории</th>
+                    <th>Контекстное меню</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,6 +26,13 @@
                 <tr>
                     <td>{{ item.id }}</td>
                     <td>{{ item.name }}</td>
+                    <td>
+                        <a
+                            href="/categories/delete/{{ item.id }}"
+                            onclick="return confirm('Вы уверены?');"
+                            >Удалить</a
+                        >
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

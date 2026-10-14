@@ -1,7 +1,14 @@
-use axum::{Router, routing::get};
+use axum::{
+    Router,
+    routing::{get, post},
+};
 use rust_web_store_rahmananin::model::{
     server_queries::AppState,
-    templates::{handlers::category_page_handler, index_handler},
+    sql::handlers::{add_category, delete_category},
+    templates::{
+        handlers::{category_page_handler, products_page_handler},
+        index_handler,
+    },
 };
 use tower_http::services::ServeDir;
 use tower_sessions::{MemoryStore, SessionManagerLayer, cookie::time::Duration};
@@ -44,7 +51,10 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Настройка web-приложения: роуты, раздача статики, мидлвары
     let app = Router::new()
         .route("/", get(index_handler))
-        .route("/categories", get(category_page_handler))
+        .route("/categories", get(category_page_handler).post(add_category))
+        .route("/categories/delete/{id}", get(delete_category))
+        .route("/products", get(products_page_handler))
+        // .route("/categories/update", patch)
         // Раздаем статику. css / js / медиа. Когда в .html мы будет обращаться через тот же href
         // к роуту /static сервер поймет что нам нужно отдать все файлы из директории static
         .nest_service("/static", ServeDir::new("static"))

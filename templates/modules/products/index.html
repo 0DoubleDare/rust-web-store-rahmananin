@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/static/main.css" />
+        <title>{{ base.page_title }}</title>
+    </head>
+    <body>
+        <h1>Продукты</h1>
+        <form action="/products" method="get">
+            <input
+                type="date"
+                name="date_from"
+                value="{{ filter.date_from }}"
+            />
+            <input type="date" name="date_to" value="{{ filter.date_to }}" />
+            <input type="number" name="price_from" value="{{ filter.price_from }}">
+            <input type="text" name="name" value="value">
+            <button type="submit">Добавить продукт</button>
+        </form>
+    </body>
+</html>

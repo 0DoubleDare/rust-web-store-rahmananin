@@ -1,7 +1,6 @@
 pub mod handlers;
 pub mod structs;
 
-
 use askama::Template;
 use askama_web::WebTemplate;
 use axum::extract::State;

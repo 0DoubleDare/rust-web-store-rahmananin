@@ -10,14 +10,68 @@
         <h1>Продукты</h1>
         <form action="/products" method="get">
             <input
-                type="date"
-                name="date_from"
-                value="{{ filter.date_from }}"
+                type="number"
+                name="stock"
+                value="{% if filter.in_stock.is_some() %} {{ filter.in_stock.unwrap() }} {% endif %}"
+                placeholder="Количество"
             />
-            <input type="date" name="date_to" value="{{ filter.date_to }}" />
-            <input type="number" name="price_from" value="{{ filter.price_from }}">
-            <input type="text" name="name" value="value">
+            <input
+                type="number"
+                name="price_from"
+                value="{% if filter.price_from.is_some() %} {{ filter.price_from.unwrap() }} {% endif %}"
+            />
+            <input
+                type="number"
+                name="price_to"
+                value="{% if filter.price_to.is_some() %} {{ filter.price_to.unwrap() }} {% endif %}"
+            />
+            <select name="category_id">
+                <option value="">Выберите категорию</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Фильтр продуктов</button>
+        </form>
+        <form action="/products" method="post">
+            <input
+                type="text"
+                name="name"
+                placeholder="Введите имя товара"
+                required
+            />
+            <input type="number" name="price" value="100" requried />
+            <input type="number" name="in_stock" value="value" required />
+            <select name="category_id">
+                <option value="">Выберите категорию</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
             <button type="submit">Добавить продукт</button>
         </form>
+        <table>
+            <thead>
+                <th>id</th>
+                <th>Имя</th>
+                <th>Цена</th>
+                <th>Осталось</th>
+                <th>Контекстное меню</th>
+            </thead>
+            <tbody>
+                {% for product in items %}
+                <tr>
+                    <th>{{ product.id }}</th>
+                    <th>{{ product.name }}</th>
+                    <th>{{ product.price }}</th>
+                    <th>{{ product.in_stock }}</th>
+                    <th>
+                        <a href="#">Удалить</a>
+                        <a href="#">Изменить</a>
+                    </th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </body>
 </html>

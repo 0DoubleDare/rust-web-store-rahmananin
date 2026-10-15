@@ -1,17 +1,16 @@
-
-use axum::extract::State;
+use axum::extract::{Query, State};
 
 use crate::model::{
     server_queries::AppState,
     sql::{
-        handlers::get_categories,
-        structs::CategoryItem,
+        handlers::{get_categories, get_products},
+        structs::{CategoryItem, ProductItem},
     },
     templates::structs::{BaseContext, CategoriesPage, ProductPageFilter, ProductsPage},
 };
 
 pub async fn category_page_handler(State(state): State<AppState>) -> CategoriesPage {
-    let categories: Vec<CategoryItem> = get_categories(State(state)).await.unwrap_or_default();
+    let categories: Vec<CategoryItem> = get_categories(&state).await.unwrap_or_default();
 
     CategoriesPage {
         base: BaseContext {
@@ -21,12 +20,15 @@ pub async fn category_page_handler(State(state): State<AppState>) -> CategoriesP
     }
 }
 
-pub async fn products_page_handler() -> ProductsPage {
+pub async fn products_page_handler(State(state): State<AppState>, Query(filter): Query<ProductPageFilter>) -> ProductsPage {
+    let categories: Vec<CategoryItem> = get_categories(&state).await.unwrap_or_default();
+    let products: Vec<ProductItem> = get_products(&state, &filter).await;
     ProductsPage {
         base: BaseContext {
             page_title: String::from("Продукты"),
         },
-        items: Vec::new(),
+        items: products,
         filter: ProductPageFilter::default(),
+        categories: categories,
     }
 }

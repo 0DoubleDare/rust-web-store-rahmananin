@@ -28,7 +28,7 @@
 > (весь дальнейший код будет находится в одном файле)
 > ```rust
 > #[derive(Template]
-> #[template(path = "index.html")]
+> #[template(path = "index.j2")]
 > pub struct HomePage {
 >   pub hello_message: String
 > }

@@ -1,8 +1,11 @@
 use askama::Template;
 use askama_web::WebTemplate;
+use serde::Deserialize;
+use serde_with::serde_as;
 
 use crate::model::sql::structs::{CategoryItem, ProductItem};
 
+#[derive(Default)]
 pub struct BaseContext {
     pub page_title: String,
 }
@@ -14,20 +17,19 @@ pub struct CategoriesPage {
     pub items: Vec<CategoryItem>,
 }
 
-#[derive(Default)]
+#[derive(Default, Deserialize)]
 pub struct ProductPageFilter {
-    pub date_from: chrono::NaiveDate,
-    pub date_to: chrono::NaiveDate,
-    pub categories_list: Vec<CategoryItem>,
-    pub price_from: i64,
-    pub price_to: i64,
-    pub is_available: bool,
+    pub category_id: Option<i64>,
+    pub price_from: Option<i64>,
+    pub price_to: Option<i64>,
+    pub in_stock: Option<i64>,
 }
 
-#[derive(Template, WebTemplate)]
+#[derive(Template, WebTemplate, Default)]
 #[template(path = "modules/products/index.html")]
 pub struct ProductsPage {
     pub base: BaseContext,
     pub items: Vec<ProductItem>,
+    pub categories: Vec<CategoryItem>,
     pub filter: ProductPageFilter,
 }

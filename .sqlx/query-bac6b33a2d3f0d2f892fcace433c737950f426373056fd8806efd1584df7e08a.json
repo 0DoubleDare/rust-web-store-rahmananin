@@ -1,0 +1,26 @@
+{
+  "db_name": "MySQL",
+  "query": "SELECT\n            COUNT(*) as count\n        FROM `products`\n        WHERE category_id = ?\n        GROUP BY category_id",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "count",
+        "type_info": {
+          "type": "LongLong",
+          "flags": "NOT_NULL | BINARY",
+          "collation": 63,
+          "max_size": 21
+        },
+        "origin": "Expression"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "bac6b33a2d3f0d2f892fcace433c737950f426373056fd8806efd1584df7e08a"
+}

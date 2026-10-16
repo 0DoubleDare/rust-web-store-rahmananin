@@ -8,27 +8,50 @@
     </head>
     <body>
         <h1>Продукты</h1>
+        <pre>
+        {{ filter|json }}
+        </pre>
         <form action="/products" method="get">
             <input
                 type="number"
-                name="stock"
-                value="{% if filter.in_stock.is_some() %} {{ filter.in_stock.unwrap() }} {% endif %}"
+                name="in_stock"
+                value="{{ filter.in_stock.unwrap_or(0) }}"
                 placeholder="Количество"
+                required
             />
+            <label for="price_from">Цена от</label>
             <input
                 type="number"
                 name="price_from"
-                value="{% if filter.price_from.is_some() %} {{ filter.price_from.unwrap() }} {% endif %}"
+                value="{{ filter.price_from.unwrap_or(0) }}"
+                required
             />
+            <label for="price_to">Цена до</label>
             <input
                 type="number"
                 name="price_to"
-                value="{% if filter.price_to.is_some() %} {{ filter.price_to.unwrap() }} {% endif %}"
+                value="{{ filter.price_to.unwrap_or(99999999) }}"
+                required
             />
-            <select name="category_id">
+            <select name="category_id" required>
                 <option value="">Выберите категорию</option>
+                <option
+                    value="-1"
+                    {% if filter.category_id.unwrap_or(-1) < 0 %}
+                        selected
+                    {% endif %}
+                >
+                    Все
+                </option>
                 {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
+                <option
+                    value="{{ category.id }}"
+                    {% if filter.category_id.unwrap_or(-1) as i32 == category.id %}
+                        selected
+                    {% endif %}
+                >
+                    {{ category.name }}
+                </option>
                 {% endfor %}
             </select>
             <button type="submit">Фильтр продуктов</button>
@@ -40,9 +63,13 @@
                 placeholder="Введите имя товара"
                 required
             />
+            <label for="price">Цена</label>
             <input type="number" name="price" value="100" requried />
+
+            <label for="in_stock">Количество</label>
             <input type="number" name="in_stock" value="value" required />
-            <select name="category_id">
+
+            <select name="category_id" required>
                 <option value="">Выберите категорию</option>
                 {% for category in categories %}
                 <option value="{{ category.id }}">{{ category.name }}</option>
@@ -66,8 +93,8 @@
                     <th>{{ product.price }}</th>
                     <th>{{ product.in_stock }}</th>
                     <th>
-                        <a href="#">Удалить</a>
-                        <a href="#">Изменить</a>
+                        <a href="/products/delete/{{ product.id }}">Удалить</a>
+                        <a href="">Изменить</a>
                     </th>
                 </tr>
                 {% endfor %}

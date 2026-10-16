@@ -1,6 +1,6 @@
 use askama::Template;
 use askama_web::WebTemplate;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_with::serde_as;
 
 use crate::model::sql::structs::{CategoryItem, ProductItem};
@@ -17,7 +17,7 @@ pub struct CategoriesPage {
     pub items: Vec<CategoryItem>,
 }
 
-#[derive(Default, Deserialize)]
+#[derive(Default, Deserialize, Debug, Serialize)]
 pub struct ProductPageFilter {
     pub category_id: Option<i64>,
     pub price_from: Option<i64>,

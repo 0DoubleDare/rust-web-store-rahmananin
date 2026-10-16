@@ -108,18 +108,22 @@ pub async fn get_products(state: &AppState, filter: &ProductPageFilter) -> Vec<P
     );
 
     if let Some(price_to) = filter.price_from {
-        query_builder.push("AND p.price >=").push_bind(price_to);
+        query_builder.push(" AND p.price >= ").push_bind(price_to);
     }
     if let Some(price_from) = filter.price_to {
-        query_builder.push("AND p.price <=").push_bind(price_from);
+        query_builder.push(" AND p.price <= ").push_bind(price_from);
     }
     if let Some(category) = filter.category_id {
-        query_builder
-            .push("AND p.category_id =")
-            .push_bind(category);
+        if category > 0 {
+            query_builder
+                .push(" AND p.category_id = ")
+                .push_bind(category);
+        }
     }
     if let Some(in_stock) = filter.in_stock {
-        query_builder.push("AND p.in_stock >=").push_bind(in_stock);
+        query_builder
+            .push(" AND p.in_stock >= ")
+            .push_bind(in_stock);
     }
 
     let result = query_builder
@@ -142,4 +146,15 @@ pub async fn get_products(state: &AppState, filter: &ProductPageFilter) -> Vec<P
     }
 
     products
+}
+
+pub async fn delete_product_by_id(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> impl IntoResponse {
+    let result = sqlx::query!("DELETE FROM products WHERE id = ?", id)
+        .execute(&state.db)
+        .await;
+
+    Redirect::to("/products")
 }

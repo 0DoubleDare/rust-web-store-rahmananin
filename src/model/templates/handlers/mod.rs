@@ -28,7 +28,7 @@ pub async fn products_page_handler(State(state): State<AppState>, Query(filter):
             page_title: String::from("Продукты"),
         },
         items: products,
-        filter: ProductPageFilter::default(),
+        filter: filter,
         categories: categories,
     }
 }

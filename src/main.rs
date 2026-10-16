@@ -1,7 +1,7 @@
 use axum::{Router, routing::get};
 use rust_web_store_rahmananin::model::{
     server_queries::AppState,
-    sql::handlers::{add_category, add_product, delete_category},
+    sql::handlers::{add_category, add_product, delete_category, delete_product_by_id},
     templates::{
         handlers::{category_page_handler, products_page_handler},
         index_handler,
@@ -51,6 +51,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/categories", get(category_page_handler).post(add_category))
         .route("/categories/delete/{id}", get(delete_category))
         .route("/products", get(products_page_handler).post(add_product))
+        .route("/products/delete/{id}", get(delete_product_by_id))
         // Раздаем статику. css / js / медиа. Когда в .html мы будет обращаться через тот же href
         // к роуту /static сервер поймет что нам нужно отдать все файлы из директории static
         .nest_service("/static", ServeDir::new("static"))
